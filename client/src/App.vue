@@ -16,5 +16,6 @@ export default {
   
 </template>
 
-<style>
+<style lang="scss">
+@import '@/assets/shared.scss';
 </style>
