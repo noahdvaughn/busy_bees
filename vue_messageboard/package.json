@@ -10,7 +10,6 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "firebase": "^9.19.1",
-    "gapi-script": "^1.2.0",
     "vue": "^3.2.13",
     "vue3-google-oauth2": "^1.0.7"
   },
