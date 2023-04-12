@@ -1,14 +1,16 @@
 <template>
 <header>
-  <div v-if="state.username === '' || state.username === null"></div>
+  <div v-if="state.currentUser.email === undefined || state.currentUser === null"></div>
   <div v-else>
-    <h1>Welcome, {{ state.username }}</h1>
+    <h1>Welcome {{ state.currentUser.given_name }} {{ state.currentUser.family_name }}</h1>
       <button class="logout" @click="Logout">Logout</button>
+    <googleLogout :callback="callback"/>
+
   </div>
 
 </header>
 
-  <div v-if="state.username === '' || state.username === null" class="view login">
+  <div v-if="state.currentUser.email === undefined  || state.currentUser === null" class="view login">
     <form @submit.prevent="Login" class="loginForm">
       <h1>Pick your username</h1>
       <label for="username"></label>
@@ -39,36 +41,28 @@
 <script>
 import db from './db'
 import {reactive, onMounted, ref, inject} from 'vue'
+import { decodeCredential, googleLogout } from 'vue3-google-login'
 
 export default {
   setup () {
     const callback = (response) => {
       console.log("handle the response", response)
+      state.currentUser = decodeCredential(response.credential)
     }
     
-
-
-
-
-
-
+    
+    
     const inputUsername = ref("")
     const inputMessage = ref("")
-
+    
     const state = reactive({
-      username: "",
+      currentUser: {},
       messages: []
     })
 
-    const Login = () => {
-      if (inputUsername.value !='' || inputUsername.value != null){
-        state.username = inputUsername.value
-        inputUsername.value = ""
-      }
-    }
-
     const Logout = () => {
-      state.username = ''
+      state.currentUser = null
+      googleLogout()
     }
     
     const SendMessage = () => {
@@ -78,7 +72,7 @@ export default {
           return;
       }
       const message = {
-        username: state.username,
+        email: state.currentUser.email,
         content: inputMessage.value
       }
       messagesRef.push(message)
@@ -95,7 +89,7 @@ export default {
         Object.keys(data).forEach(key => {
           messages.push({
             id: key,
-            username: data[key].username,
+            email: data[key].email,
             content: data[key].content
           })
         })
@@ -104,7 +98,6 @@ export default {
       })
     return{
       inputUsername,
-      Login,
       state,
       inputMessage,
       SendMessage,
@@ -117,8 +110,9 @@ export default {
 
 <style lang="scss">
 
-body {
+body, h1 {
  margin: 0;
+ padding: 0;
 }
 header{
   background-color: grey;

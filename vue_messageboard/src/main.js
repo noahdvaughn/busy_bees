@@ -11,5 +11,4 @@ app.use(gAuthPlugin, {
 })
 app.mount('#app')
 
-// scope: 'email',
 // prompt: 'consent'
