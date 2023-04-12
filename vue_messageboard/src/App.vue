@@ -16,7 +16,7 @@
       <input type="submit" value="Login">
     </form>
 
-    <h1>Is initialized: {{ Vue3GoogleOauth.isInit }}</h1>
+    <GoogleLogin :callback="callback"/>
   </div>
 
   <div v-else class="view">
@@ -42,7 +42,9 @@ import {reactive, onMounted, ref, inject} from 'vue'
 
 export default {
   setup () {
-    const Vue3GoogleOauth = inject('Vue3GoogleOauth');
+    const callback = (response) => {
+      console.log("handle the response", response)
+    }
     
 
 
@@ -107,7 +109,7 @@ export default {
       inputMessage,
       SendMessage,
       Logout,
-      Vue3GoogleOauth
+      callback
     }
   }
 }
