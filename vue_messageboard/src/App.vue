@@ -16,17 +16,22 @@
     <div class="login">
       <h3 class="instruction">Sign in, you busy bee</h3>
       <GoogleLogin :callback="callback"/>
-
     </div>
   </div>
 
   <div v-else class="view">
+
     <section class="chat-box">
       <div v-for="message in state.messages" :key="message.key">
-        <div v-if="message.email === state.currentUser.email">
-          <div class="message-inner"> {{ message.content }}</div>
-          <div class="username"> - {{ message.email }}</div>
-
+        <div v-if="message.email === state.currentUser.email" class="taskRow">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1024px-Eo_circle_green_checkmark.svg.png?20200417132424" class="check"/>
+          
+          <div class="task">
+            <p class="content"> {{ message.content }}</p>
+          </div>
+          
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Eo_circle_red_letter-x.svg/2048px-Eo_circle_red_letter-x.svg.png" class="check"/>
+          
         </div>
       </div>
     </section>
@@ -54,7 +59,9 @@ export default {
     const inputMessage = ref("")
     
     const state = reactive({
-      currentUser: {},
+      currentUser: {
+        email: 'noahdvaughn@gmail.com'
+      },
       messages: []
     })
 
@@ -70,7 +77,8 @@ export default {
       }
       const message = {
         email: state.currentUser.email,
-        content: inputMessage.value
+        content: inputMessage.value,
+        completed: false
       }
       messagesRef.push(message)
       inputMessage.value = ""
@@ -141,12 +149,43 @@ h1{
 .login{
   text-align: center;
 }
-.instruction{
+.instruction, .task{
   color: white;
   background-color: $yellow;
   border-radius: 20px;
   border: 2px solid white;
   padding: 10px;
+ 
+}
+.task{
+  // border: 2px solid black;
+  margin: 10px;
+  // display: flex;
+  // justify-content: space-between;
+  // align-items: center;
+}
+.taskRow{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+}
+.chat-box{
+  background-color: rgb(255, 198, 41, 0.5);
+  border-radius: 20px;
+  margin-bottom: 10px;
+  width: 70vw;
+
+}
+.check{
+  max-width: 30px;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: break-word;
+
+  width: 40vw;
 }
 
 
