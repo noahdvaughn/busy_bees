@@ -1,31 +1,33 @@
 <template>
 <header>
-  <div v-if="state.currentUser.email === undefined || state.currentUser === null"></div>
+  <div v-if=" state.currentUser === null || state.currentUser.email === undefined ">
+  <h1 class="headerText">DoTheThing</h1>
+  </div>
   <div v-else>
     <h1>Welcome {{ state.currentUser.given_name }} {{ state.currentUser.family_name }}</h1>
       <button class="logout" @click="Logout">Logout</button>
-    <googleLogout :callback="callback"/>
+    <!-- <googleLogout :callback="callback"/> -->
 
   </div>
 
 </header>
 
-  <div v-if="state.currentUser.email === undefined  || state.currentUser === null" class="view login">
-    <form @submit.prevent="Login" class="loginForm">
-      <h1>Pick your username</h1>
-      <label for="username"></label>
-      <input type="text" v-model="inputUsername" placeholder="enter username">
-      <input type="submit" value="Login">
-    </form>
+  <div v-if="state.currentUser === null ||state.currentUser.email === undefined  " class="view">
+    <div class="login">
+      <h3 class="instruction">Sign in, you busy bee</h3>
+      <GoogleLogin :callback="callback"/>
 
-    <GoogleLogin :callback="callback"/>
+    </div>
   </div>
 
   <div v-else class="view">
     <section class="chat-box">
-      <div v-for="message in state.messages" :key="message.key" :class="(message.username == state.username ? 'message current' : 'message')">
-      <div class="message-inner"> {{ message.content }}</div>
-      <div class="username"> - {{ message.username }}</div>
+      <div v-for="message in state.messages" :key="message.key">
+        <div v-if="message.email === state.currentUser.email">
+          <div class="message-inner"> {{ message.content }}</div>
+          <div class="username"> - {{ message.email }}</div>
+
+        </div>
       </div>
     </section>
 
@@ -49,10 +51,6 @@ export default {
       console.log("handle the response", response)
       state.currentUser = decodeCredential(response.credential)
     }
-    
-    
-    
-    const inputUsername = ref("")
     const inputMessage = ref("")
     
     const state = reactive({
@@ -62,12 +60,11 @@ export default {
 
     const Logout = () => {
       state.currentUser = null
-      googleLogout()
+      // googleLogout()
     }
     
     const SendMessage = () => {
       const messagesRef = db.database().ref("messages");
-
       if (inputMessage.value === '' || inputMessage.value === null){
           return;
       }
@@ -81,8 +78,10 @@ export default {
 
       onMounted(()=>{
       const messagesRef = db.database().ref("messages");
-
+      
+      
       messagesRef.on('value', snapshot => {
+        // console.log(state.messages)
         const data = snapshot.val()
         let messages = []
 
@@ -97,7 +96,6 @@ export default {
       })
       })
     return{
-      inputUsername,
       state,
       inputMessage,
       SendMessage,
@@ -109,14 +107,26 @@ export default {
 </script>
 
 <style lang="scss">
+@import './colors.scss';
+@import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
 
-body, h1 {
+body {
  margin: 0;
  padding: 0;
+ font-family: Patua One;
+ background-image: url('https://i.etsystatic.com/5247433/r/il/301540/1823642970/il_1588xN.1823642970_6c3g.jpg');
+ background-size: 240%;
+ background-position: center;
 }
 header{
-  background-color: grey;
+  background-color: $yellow;
   height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+h1{
+  color: white;
 }
 .loginForm{
   text-align: center;
@@ -127,9 +137,16 @@ header{
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  
-  &.login{
-   }
+}
+.login{
+  text-align: center;
+}
+.instruction{
+  color: white;
+  background-color: $yellow;
+  border-radius: 20px;
+  border: 2px solid white;
+  padding: 10px;
 }
 
 
