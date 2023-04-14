@@ -38,8 +38,8 @@
 
     <footer>
       <form @submit.prevent="SendMessage">
-        <input type="text" placeholder="Write a message" v-model="inputMessage"/>
-        <input type="submit" value="Send"/>
+        <input type="text" placeholder="Add a task" v-model="inputMessage" class="input"/>
+        <input type="submit" value="Add" class="button"/>
       </form>
     </footer>
   </div>
@@ -125,6 +125,7 @@ body {
  background-image: url('https://i.etsystatic.com/5247433/r/il/301540/1823642970/il_1588xN.1823642970_6c3g.jpg');
  background-size: 240%;
  background-position: center;
+
 }
 header{
   background-color: $yellow;
@@ -140,11 +141,13 @@ h1{
   text-align: center;
 }
 .view{
-  min-height: 90vh;
+  height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+ overflow-y: scroll;
+
 }
 .login{
   text-align: center;
@@ -175,6 +178,7 @@ h1{
   border-radius: 20px;
   margin-bottom: 10px;
   width: 70vw;
+  
 
 }
 .check{
@@ -186,6 +190,20 @@ h1{
   overflow-wrap: break-word;
 
   width: 40vw;
+}
+.input{
+padding: 5px;
+}
+::placeholder{
+  color: white;
+}
+.button, .input{
+  border-radius: 20px;
+  border: 2px solid white;
+  margin-left: 5px;
+  color: white;
+  font-weight: 800;
+  background-color: $yellow;
 }
 
 
