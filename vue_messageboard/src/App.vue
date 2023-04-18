@@ -21,8 +21,9 @@
 <div v-else class="view">
   
   <div class="buttons">
-    <button class="button" @click="Logout">Logout</button>
-    <button class="button" @click="ToggleViewing">View Completed Tasks</button>
+    <button  class="button" @click="Logout">Logout</button>
+    <button v-if="state.viewingCompleted === false" class="button" @click="ToggleViewing">View Completed Tasks</button>
+    <button v-if="state.viewingCompleted === true" class="button" @click="ToggleViewing">Go Back</button>
   </div>
 
     <section v-if="state.viewingCompleted === false" class="chat-box">
